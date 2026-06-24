@@ -1,0 +1,27 @@
+name: Deploy to Cloudflare
+
+# Deploys the site to your Cloudflare Worker on every push to main.
+# Requires two repo secrets (Settings -> Secrets and variables -> Actions):
+#   CLOUDFLARE_API_TOKEN   - a token with the "Edit Cloudflare Workers" template
+#   CLOUDFLARE_ACCOUNT_ID  - your account id (eb31bb2b824ed150934510c8d02927a6)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy with Wrangler
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy
