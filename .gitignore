@@ -3,6 +3,9 @@ node_modules/
 package.json
 package-lock.json
 
+# wrangler local cache (account info / deploy cache — never commit)
+.wrangler/
+
 # OS / editor cruft
 .DS_Store
 Thumbs.db
