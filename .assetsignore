@@ -1,0 +1,12 @@
+# files that should NOT be served as part of the site
+.git
+.github
+.wrangler
+node_modules
+*.md
+wrangler.jsonc
+.assetsignore
+.gitignore
+.gitattributes
+package.json
+package-lock.json
