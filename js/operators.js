@@ -39,9 +39,17 @@ const OPERATORS = [
     label: "File type",
     placeholder: "pdf",
     example: "filetype:pdf",
-    help: "Finds a specific file extension: pdf, doc, docx, xls, xlsx, csv, ppt, txt, sql, log...",
-    goodFor: "Hunting documents, datasets, slide decks.",
-    build: (v) => (v.trim() ? `filetype:${v.trim().replace(/^\./, "")}` : ""),
+    help: "Finds files by extension — documents (pdf, docx, xls), media (mp4, mp3, jpg), archives (zip), code (js, py) and more. Multiple extensions become an OR group.",
+    goodFor: "Hunting documents, datasets, videos, images, slide decks.",
+    build: (v) => {
+      const exts = String(v)
+        .split(/[\s,]+/)
+        .map((e) => e.trim().replace(/^\./, ""))
+        .filter(Boolean);
+      if (!exts.length) return "";
+      if (exts.length === 1) return `filetype:${exts[0]}`;
+      return "(" + exts.map((e) => `filetype:${e}`).join(" OR ") + ")";
+    },
   },
   {
     key: "intitle",

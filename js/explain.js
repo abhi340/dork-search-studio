@@ -24,7 +24,8 @@
     if (typeof buildQuery === "function" && !buildQuery(fields)) return "";
 
     const ft = v(fields, "filetype");
-    let subject = ft ? `Find ${FILE_NAMES[ft] || ft.toUpperCase()} files` : "Find pages";
+    const ftName = typeof fileTypeName === "function" ? fileTypeName(ft) : FILE_NAMES[ft];
+    let subject = ft ? `Find ${ftName || ft.split(",")[0].toUpperCase()} files` : "Find pages";
 
     const bits = [];
     if (v(fields, "keywords")) bits.push(`about ${v(fields, "keywords")}`);

@@ -42,4 +42,24 @@ const TEMPLATES = [
     description: "Common exposed text/config/log file types on a site.",
     fields: { site: "example.com", or: "config, backup, settings", filetype: "txt" },
   },
+  {
+    title: "Videos on a specific site",
+    description: "Find video files (mp4, mov, avi, mkv, webm) on a website.",
+    fields: { site: "example.com", filetype: "mp4,mov,avi,mkv,webm" },
+  },
+  {
+    title: "Images on a domain",
+    description: "Find image files (jpg, png, gif, svg, webp) on a site.",
+    fields: { site: "example.com", filetype: "jpg,png,gif,svg,webp" },
+  },
+  {
+    title: "Audio & podcasts",
+    description: "Track down audio files (mp3, wav, flac, m4a, ogg).",
+    fields: { keywords: "interview", filetype: "mp3,wav,flac,m4a,ogg" },
+  },
+  {
+    title: "E-books to read",
+    description: "Find e-book files (epub, mobi, azw3) by title or author.",
+    fields: { exact: "book title", filetype: "epub,mobi,azw3" },
+  },
 ];

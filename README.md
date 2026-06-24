@@ -32,6 +32,9 @@ filters.
 - **Rich operators:** site, filetype, exact phrase, in-title/url/text,
   all-in-title, OR, exclude, date range, `related:`, `AROUND(n)` proximity, and
   number ranges.
+- **13 file-type categories:** PDF, Word, Excel, PowerPoint, **Video, Audio,
+  Image, Archive, Code, Data, Text, E-book** — a category with multiple
+  extensions expands to an OR group (e.g. Video → `(filetype:mp4 OR filetype:mov OR …)`).
 - **Saved dorks & recent history** — name and re-run your queries (stored locally).
 - **Shareable links** — "Copy link" encodes your whole setup into a URL;
   templates deep-link straight into the builder, pre-filled.
@@ -94,6 +97,7 @@ js/theme.js           # light/dark theme + persistence (loads in <head>)
 js/layout.js          # shared header (nav + theme toggle) + footer + scroll reveals
 js/operators.js       # every operator — single source of truth
 js/engines.js         # query assembly + search-engine URLs (7 engines)
+js/filetypes.js       # file-type categories (docs, video, audio, image, code…)
 js/explain.js         # plain-English explanation of the current query
 js/storage.js         # saved dorks + recent-search history (localStorage)
 js/share.js           # encode/decode builder state in the URL hash

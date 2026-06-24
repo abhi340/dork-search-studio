@@ -15,13 +15,11 @@
     return d.toISOString().slice(0, 10);
   }
 
-  const FILETYPES = [
+  // shared categories from filetypes.js (fallback kept for safety)
+  const FILETYPES = typeof FILE_GROUPS !== "undefined" ? FILE_GROUPS : [
     { label: "Any", value: "" },
     { label: "PDF", value: "pdf" },
-    { label: "Word", value: "doc" },
-    { label: "Excel", value: "xls" },
-    { label: "PowerPoint", value: "ppt" },
-    { label: "CSV", value: "csv" },
+    { label: "Word", value: "doc,docx" },
     { label: "Text", value: "txt" },
   ];
   const RECENCY = [
