@@ -45,6 +45,29 @@
     clearSaved() {
       write(SKEY, []);
     },
+    exportSaved() {
+      return JSON.stringify(read(SKEY), null, 2);
+    },
+    importSaved(json) {
+      try {
+        const incoming = JSON.parse(json);
+        if (!Array.isArray(incoming)) return -1;
+        const clean = incoming.filter((x) => x && x.query).map((x) => ({
+          id: x.id || String(Date.now()) + Math.random().toString(36).slice(2, 6),
+          name: String(x.name || x.query).slice(0, 80),
+          query: String(x.query),
+          fields: x.fields && typeof x.fields === "object" ? x.fields : {},
+        }));
+        const merged = clean.concat(read(SKEY));
+        // de-dup by query, keep first
+        const seen = new Set();
+        const deduped = merged.filter((x) => (seen.has(x.query) ? false : seen.add(x.query)));
+        write(SKEY, deduped.slice(0, MAX_SAVED));
+        return clean.length;
+      } catch (_) {
+        return -1;
+      }
+    },
 
     listHistory() {
       return read(HKEY);

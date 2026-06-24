@@ -750,6 +750,37 @@ summary:focus-visible {
   font-weight: 700;
 }
 
+/* paste-to-edit row (reverse parser) + recon form share this layout */
+.recon-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.recon-row input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.recon-row .btn {
+  flex: 0 0 auto;
+}
+
+.paste-field {
+  border-bottom: 3px dashed var(--border-col);
+  padding-bottom: 18px;
+}
+
+.recon-form {
+  margin-bottom: 26px;
+}
+
+.saved-head-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 /* ---------- Action / save rows ---------- */
 .action-row,
 .save-row {

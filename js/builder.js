@@ -121,6 +121,31 @@
 
   /* ================= LEFT: form ================= */
   const form = el("div", { class: "step-card builder-main" });
+
+  // reverse parser: paste an existing dork to load + explain it
+  const pasteInput = el("input", {
+    type: "text",
+    class: "paste-input",
+    attrs: { placeholder: 'paste a query, e.g.  site:nasa.gov filetype:pdf "mars"', autocomplete: "off", spellcheck: "false", maxlength: "400", "aria-label": "Paste an existing query to edit it" },
+  });
+  const pasteBtn = el("button", {
+    class: "btn btn-violet", attrs: { type: "button" }, text: "Load",
+    on: {
+      click: () => {
+        const parsed = typeof parseQuery === "function" ? parseQuery(pasteInput.value) : {};
+        if (Object.keys(parsed).length) {
+          applyFields(parsed);
+          pasteInput.value = "";
+        }
+      },
+    },
+  });
+  pasteInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); pasteBtn.click(); } });
+  form.append(el("div", { class: "step-field paste-field" },
+    el("label", { class: "field-label", text: "Have a query already? Paste it to edit & explain" }),
+    el("div", { class: "recon-row" }, pasteInput, pasteBtn)
+  ));
+
   form.append(textField("keywords", "What are you looking for?", "e.g. climate change report", "text", true));
   form.append(
     el("div", { class: "builder-grid" },
@@ -169,6 +194,19 @@
     on: { click: (e) => copyText(DorkShare.link(readAll()), e.currentTarget) } });
   const clearBtn = el("button", { class: "btn btn-ghost", attrs: { type: "button" }, text: "Clear",
     on: { click: clearAll } });
+  const openAllBtn = el("button", {
+    class: "btn", attrs: { type: "button", disabled: "" }, text: "Open all",
+    on: {
+      click: () => {
+        const q = buildQuery(readAll());
+        if (!q) return;
+        DorkStore.addHistory(q, readAll());
+        renderRecent();
+        document.dispatchEvent(new CustomEvent("dork:search"));
+        ENGINES.forEach((e) => window.open(e.url(q), "_blank", "noopener,noreferrer"));
+      },
+    },
+  });
 
   const nameInput = el("input", { type: "text", class: "save-name",
     attrs: { placeholder: "name this dork…", maxlength: "80", "aria-label": "Name this dork" } });
@@ -182,7 +220,7 @@
     el("span", { class: "preview-label", text: "Search on" }),
     engineGrid,
     el("p", { class: "engine-note", text: "Google & Bing honor the most operators. Scholar, Yandex & Brave support fewer." }),
-    el("div", { class: "action-row" }, copyBtn, linkBtn, clearBtn),
+    el("div", { class: "action-row" }, copyBtn, linkBtn, openAllBtn, clearBtn),
     el("div", { class: "save-row" }, nameInput, saveBtn)
   );
 
@@ -192,11 +230,35 @@
   const savedList = el("div", { class: "saved-list" });
   const recentList = el("div", { class: "saved-list" });
 
+  // hidden file input + export/import for backing up saved dorks
+  const importInput = el("input", { type: "file", attrs: { accept: "application/json,.json", "aria-label": "Import saved dorks" } });
+  importInput.style.display = "none";
+  importInput.addEventListener("change", () => {
+    const file = importInput.files && importInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => { DorkStore.importSaved(String(reader.result || "")); renderSaved(); importInput.value = ""; };
+    reader.readAsText(file);
+  });
+  function exportDorks() {
+    const blob = new Blob([DorkStore.exportSaved()], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = el("a", { attrs: { href: url, download: "dork-studio-saved.json" } });
+    document.body.append(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
   const savedSection = el("section", { class: "section saved-section" },
     el("div", { class: "saved-head" },
       el("h2", { class: "section-title", text: "Saved dorks" }),
-      el("button", { class: "btn btn-ghost mini", attrs: { type: "button" }, text: "Clear all",
-        on: { click: () => { DorkStore.clearSaved(); renderSaved(); } } })
+      el("div", { class: "saved-head-actions" },
+        el("button", { class: "btn btn-ghost mini", attrs: { type: "button" }, text: "Export", on: { click: exportDorks } }),
+        el("button", { class: "btn btn-ghost mini", attrs: { type: "button" }, text: "Import", on: { click: () => importInput.click() } }),
+        el("button", { class: "btn btn-ghost mini", attrs: { type: "button" }, text: "Clear all", on: { click: () => { DorkStore.clearSaved(); renderSaved(); } } }),
+        importInput
+      )
     ),
     savedList,
     el("div", { class: "saved-head" },
@@ -223,7 +285,7 @@
       explainerBox.textContent = "";
     }
     const disabled = !query;
-    [copyBtn, linkBtn, saveBtn].forEach((b) => (b.disabled = disabled));
+    [copyBtn, linkBtn, openAllBtn, saveBtn].forEach((b) => (b.disabled = disabled));
     engineGrid.querySelectorAll("button").forEach((b) => (b.disabled = disabled));
     return query;
   }
@@ -337,12 +399,25 @@
     }
   }
 
-  /* Enter in any input launches Google */
+  /* Enter in a field launches Google (paste box + name box handle their own Enter) */
   root.addEventListener("input", updatePreview);
   root.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && e.target.tagName === "INPUT" && e.target !== nameInput) {
+    if (e.key === "Enter" && e.target.tagName === "INPUT" && e.target !== nameInput && e.target !== pasteInput) {
       e.preventDefault();
       runSearch(ENGINES[0]);
+    }
+  });
+
+  /* page-level keyboard shortcuts */
+  document.addEventListener("keydown", (e) => {
+    const typing = /^(INPUT|TEXTAREA)$/.test(e.target.tagName) || e.target.isContentEditable;
+    if (e.key === "/" && !typing) {
+      e.preventDefault();
+      const k = document.getElementById("f-keywords");
+      if (k) k.focus();
+    } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      const q = buildQuery(readAll());
+      if (q) runSearch(ENGINES[0]);
     }
   });
 

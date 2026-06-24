@@ -42,6 +42,15 @@ filters.
   questions and drops search tips in a deadpan-professional tone. Auto-greets
   once on first visit. Fully scripted (canned answers) — **not an AI**, no model,
   no network calls.
+- **Reverse dork parser** — paste an existing query (`site:x.com filetype:pdf "y" -z`)
+  and it loads into the builder *and* explains it. The tool reads dorks, not just writes them.
+- **Domain Recon Pack** (`recon.html`) — enter one domain, get a ready-made set of
+  useful dorks (open directories, login pages, exposed files, configs…). For
+  learning and **authorised** testing only.
+- **Backup & power tools** — export/import saved dorks as JSON, "Open all engines"
+  at once, and keyboard shortcuts (`/` focus search, `Ctrl/Cmd+Enter` to search).
+- **Installable PWA** — add to home screen and use **fully offline** (manifest +
+  service worker; cache-first for same-origin assets, never caches search engines).
 
 Design: **playful neo-brutalism** — bold borders and chunky offset shadows, but
 rounded, bright, bouncy and spacious. **Light & dark themes** (toggle in the
@@ -54,6 +63,7 @@ which keeps the security policy strict and the site offline-safe.
 | ---------------- | --------------------------------------------- |
 | `index.html`     | The single-screen query builder (home)        |
 | `templates.html` | One-click ready-made search recipes           |
+| `recon.html`     | Domain Recon Pack — dorks for one domain       |
 | `learn.html`     | Every operator explained                      |
 | `about.html`     | What the tool is and how it works             |
 | `privacy.html`   | Privacy policy (we collect nothing)           |
@@ -89,9 +99,11 @@ The `_headers` file is picked up automatically and applies the security headers
 ## Project structure
 
 ```
-index.html / templates.html / learn.html
+index.html / templates.html / recon.html / learn.html
 about.html / privacy.html / terms.html
 _headers              # Cloudflare Pages security headers
+manifest.webmanifest  # PWA manifest (installable)
+sw.js                 # service worker (offline cache-first)
 css/styles.css        # neo-brutalist theme + light/dark + animations
 js/theme.js           # light/dark theme + persistence (loads in <head>)
 js/layout.js          # shared header (nav + theme toggle) + footer + scroll reveals
@@ -99,13 +111,16 @@ js/operators.js       # every operator — single source of truth
 js/engines.js         # query assembly + search-engine URLs (7 engines)
 js/filetypes.js       # file-type categories (docs, video, audio, image, code…)
 js/explain.js         # plain-English explanation of the current query
-js/storage.js         # saved dorks + recent-search history (localStorage)
+js/parse.js           # reverse parser (query string -> builder fields)
+js/storage.js         # saved dorks + recent history + export/import (localStorage)
 js/share.js           # encode/decode builder state in the URL hash
 js/templates.js       # preset recipes (data)
 js/learn.js           # teaching tips (data)
 js/builder.js         # the two-column query builder (home)
 js/render.js          # renders the templates + learn grids
+js/recon.js           # Domain Recon Pack generator
 js/duck.js            # "QuackOverflow" — the scripted animated mascot helper
+js/pwa.js             # registers the service worker
 ```
 
 Add a new operator in `operators.js` and it appears in the Learn page
