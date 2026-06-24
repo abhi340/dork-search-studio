@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#c8f000" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Templates — Dork Search Studio" />
+    <meta property="og:description" content="One-click advanced-search recipes you can launch or open in the builder." />
+    <meta property="og:image" content="favicon.svg" />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      name="description"
+      content="Ready-made advanced search recipes — PDFs on a site, open directories, datasets and more. Launch them in one click."
+    />
+    <title>Templates — Dork Search Studio</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="hero">
+        <h1>Ready-made <span class="pop">recipes</span></h1>
+        <p>
+          One-click search recipes for common goals. Launch any of them, or copy
+          the query and tweak it your way.
+        </p>
+      </section>
+
+      <section class="section">
+        <div id="templates-grid" class="grid">
+          <!-- cards injected by render.js -->
+        </div>
+      </section>
+    </main>
+
+    <script src="js/operators.js"></script>
+    <script src="js/engines.js"></script>
+    <script src="js/templates.js"></script>
+    <script src="js/share.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/render.js"></script>
+    <script src="js/duck.js"></script>
+  </body>
+</html>

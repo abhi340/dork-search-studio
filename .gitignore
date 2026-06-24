@@ -1,0 +1,16 @@
+# dependencies (this project is dependency-free; these only appear during local testing)
+node_modules/
+package.json
+package-lock.json
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+.idea/
+.vscode/
+
+# misc temp
+_*.js
+*.tmp

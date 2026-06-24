@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"
+    />
+    <meta name="referrer" content="no-referrer" />
+    <meta name="theme-color" content="#c8f000" />
+    <meta
+      name="description"
+      content="Build powerful, precise web searches with Google-dorking operators across 7 engines — beginner-friendly, runs entirely in your browser."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dork Search Studio — find exactly what you want" />
+    <meta property="og:description" content="Build powerful, precise web searches with Google-dorking operators across 7 engines." />
+    <meta property="og:image" content="favicon.svg" />
+    <meta name="twitter:card" content="summary" />
+    <title>Dork Search Studio — find exactly what you want</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+    <script src="js/theme.js"></script>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="hero">
+        <h1>Find <span class="pop">exactly</span> what you want</h1>
+        <p>
+          Fill in what you need and we'll build a powerful, precise search — no
+          jargon required. The query updates live as you type.
+        </p>
+      </section>
+
+      <section class="section">
+        <div id="builder-root">
+          <!-- builder injected by builder.js -->
+        </div>
+      </section>
+    </main>
+
+    <script src="js/operators.js"></script>
+    <script src="js/engines.js"></script>
+    <script src="js/explain.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/share.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/builder.js"></script>
+    <script src="js/duck.js"></script>
+  </body>
+</html>
